@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Менеджер задач</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+<div class="container">
+  <h1>Менеджер задач</h1>
+  <form id="task-form">
+    <input type="text" id="task-title" placeholder="Заголовок задачи" required>
+    <textarea id="task-desc" placeholder="Описание задачи"></textarea>
+    <select id="task-status">
+      <option value="pending">Не выполнено</option>
+      <option value="completed">Выполнено</option>
+    </select>
+    <button type="submit">Добавить задачу</button>
+  </form>
+
+  <div class="tasks">
+    <h2>Список задач</h2>
+    <div id="task-list"></div>
+  </div>
+</div>
+<script src="app.js" defer></script>
+</body>
+</html>
