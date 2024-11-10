@@ -15,7 +15,7 @@
       <h2>Добавить новую задачу</h2>
       <input type="text" id="task-title" placeholder="Заголовок задачи" required>
       <textarea id="task-desc" placeholder="Описание задачи"></textarea>
-      <input id="task-owner" placeholder="Исполнитель" required>
+      <input id="task-owner" placeholder="Исполнитель">
       <select id="task-status" required>
         <option value="" disabled selected>Выберите статус задачи</option>
         <option value="новая">Новая</option>
@@ -28,6 +28,7 @@
         <option value="срочная">Срочная</option>
         <option value="событие">Событие</option>
       </select>
+      <input id="task-place" style="display: none" placeholder="Место события">
       <button type="submit" id="add-task-btn">Добавить задачу</button>
       <button id="save-task-btn" type="button" style="display:none;">Сохранить задачу</button>
     </form>
@@ -39,15 +40,15 @@
         <input type="text" id="filter-owner" placeholder="Исполнитель">
         <select id="filter-status">
           <option value="">Все статусы</option>
-          <option value="New">Новая</option>
-          <option value="InProgress">В процессе</option>
-          <option value="Completed">Выполнено</option>
+          <option value="новая">Новая</option>
+          <option value="в процессе">В процессе</option>
+          <option value="выполнено">Выполнено</option>
         </select>
         <select id="filter-type">
           <option value="">Все типы</option>
-          <option value="Normal">Обычная</option>
-          <option value="Major">Срочная</option>
-          <option value="Event">Событие</option>
+          <option value="обычная">Обычная</option>
+          <option value="срочная">Срочная</option>
+          <option value="событие">Событие</option>
         </select>
         <button id="filter-btn">Фильтровать</button>
         <button id="reset-filter-btn">Сбросить фильтры</button>
@@ -62,6 +63,7 @@
           <th>Исполнитель</th>
           <th>Статус</th>
           <th>Тип</th>
+          <th>Место события</th>
           <th id="sort-date">
             Дата создания
             <span class="sort-arrow" id="sort-arrow">&#9650;</span>

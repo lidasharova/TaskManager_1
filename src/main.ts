@@ -8,6 +8,7 @@ const taskForm = document.getElementById('task-form') as HTMLFormElement;
 const taskTitleInput = document.getElementById('task-title') as HTMLInputElement;
 const taskDescInput = document.getElementById('task-desc') as HTMLTextAreaElement;
 const taskOwnerInput = document.getElementById('task-owner') as HTMLInputElement;
+const taskPlaceInput = document.getElementById('task-place') as HTMLInputElement;
 const taskStatusInput = document.getElementById('task-status') as HTMLSelectElement;
 const taskTypeInput = document.getElementById('task-type') as HTMLSelectElement;
 const saveTaskBtn = document.getElementById('save-task-btn') as HTMLButtonElement;
@@ -37,16 +38,18 @@ taskForm.addEventListener('submit', (event) => {
     const status = taskStatusInput.value as TaskStatus;
     const type = taskTypeInput.value as TaskType;
     const date = new Date(); // дата создания
+    const place = type === TaskType.Event ? taskPlaceInput.value : null; // Получаем место, если это 'событие'
 
     // Создаем новую задачу
     const newTask: Task = {
         id: Math.random().toString(36).slice(2, 11),
         title,
         description,
-        owner: owner ?? '',
         status,
         type,
-        date
+        date,
+        owner: owner ?? '',
+        place: place ?? '',
     };
 
     taskManager.addTask(newTask);
@@ -72,6 +75,7 @@ const renderTasks = (tasks = taskManager.getTasks()) => {
             <td>${task.owner || '—'}</td>
             <td>${task.status}</td>
             <td>${task.type}</td>
+            <td>${task.place || '—' }</td>
             <td>${task.date && formatDate(task.date)}</td>
             <td>
                 <button class="edit-btn" data-id="${task.id}">Edit</button>
@@ -118,6 +122,7 @@ saveTaskBtn.addEventListener('click', () => {
     const owner = taskOwnerInput.value || null;
     const status = taskStatusInput.value as TaskStatus;
     const type = taskTypeInput.value as TaskType;
+    const place = taskPlaceInput.value as TaskType;
 
     if (currentEditingTask) {
         // обновляем её
@@ -126,6 +131,7 @@ saveTaskBtn.addEventListener('click', () => {
         currentEditingTask.owner = owner ?? '';
         currentEditingTask.status = status;
         currentEditingTask.type = type;
+        currentEditingTask.place = place ?? '';
 
         taskManager.editTask(currentEditingTask.id, currentEditingTask);
         renderTasks();
@@ -192,6 +198,19 @@ dateHeader.addEventListener('click', () => {
 clearAll.addEventListener('click', () => {
     taskManager.deleteAllTasks();
 })
+
+// Обработчик изменения типа задачи
+taskTypeInput.addEventListener('change', (event) => {
+    const selectedType = (event.target as HTMLSelectElement).value;
+
+    // Показываем или скрываем поле в зависимости от выбранного типа
+    if (selectedType === TaskType.Event) {
+        taskPlaceInput.style.display = 'block';
+    } else {
+        taskPlaceInput.style.display = 'none';
+    }
+});
+
 
 // Инициализация при загрузке страницы
 renderTasks();

@@ -20,6 +20,7 @@ export interface Task {
     type: TaskType; // тип задачи
     date: Date; // дата создания
     owner?: string; // ответственный за задачу
+    place?: string; // место встречи для типа 'Событие'
 }
 
 // Интерфейс для фильтрации задач
