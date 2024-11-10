@@ -1,14 +1,14 @@
 // Типы задач для расширения типов и статуса задач
 export enum TaskStatus {
-    New = 'new',
-    InProgress = 'in-progress',
-    Completed = 'completed',
+    New = 'новая',
+    InProgress = 'в процессе',
+    Completed = 'выполнено',
 }
 
 export enum TaskType {
-    General = 'general',
-    Deadline = 'deadline',
-    Event = 'event',
+    Normal = 'обычная', // общая задача
+    Major = 'срочная', // срочная задача
+    Event = 'событие', // связанная с каким-то событием или мероприятием
 }
 
 // Интерфейс для задачи
@@ -16,12 +16,10 @@ export interface Task {
     id: string;
     title: string;
     description: string;
-    createdAt: Date;
-    status: TaskStatus;
-    type: TaskType;
-    dueDate?: Date; // Только для задач с типом "deadline"
-    assignedTo?: string; // Только для задач с типом "event"
-    location?: string; // Только для задач с типом "event"
+    status: TaskStatus; // статус задачи
+    type: TaskType; // тип задачи
+    date: Date; // дата создания
+    owner?: string; // ответственный за задачу
 }
 
 // Интерфейс для фильтрации задач
