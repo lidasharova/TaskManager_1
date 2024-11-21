@@ -1,4 +1,4 @@
-import { Task, TaskFilter } from './types';
+import { Task, TaskFilter, TaskStatus, TaskType } from './types';
 
 export class TaskManager {
     private tasks: Task[] = [];
@@ -68,9 +68,45 @@ export class TaskManager {
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tasks)); // Сохраняем задачи в localStorage
     }
 
-    // Загрузка задач из localStorage
+    // Проверка структуры задачи
+    private isValidTask(task: any): task is Task {
+        const data = this.isValidDate(task.date);
+
+        const result =  task && typeof task.id === 'string'
+            && typeof task.title === 'string'
+            && typeof task.description === 'string'
+            && Object.values(TaskStatus).includes(task.status)
+            && Object.values(TaskType).includes(task.type)
+            && data
+            && (task.owner === undefined || typeof task.owner === 'string' || task.owner === "" || task.owner.trim() !== "")
+            && (task.place === undefined || typeof task.place === 'string' || task.place === "" || task.place.trim() !== "");
+        return result;
+    }
+
+    // Проверка, валидна ли строка как дата
+    private isValidDate(date: string): boolean {
+        const parsedDate = new Date(date);
+        return !isNaN(parsedDate.getTime());
+    }
+
+    // Загрузка задач из localStorage исключая порчу данных
     private loadTasks(): Task[] {
-        const storedTasks = localStorage.getItem(this.STORAGE_KEY);
-        return storedTasks ? JSON.parse(storedTasks) : []; // Загружаем задачи из localStorage
+        try {
+            const storedTasks = localStorage.getItem(this.STORAGE_KEY);
+            if (storedTasks) {
+                const parsedTasks = JSON.parse(storedTasks);
+                // Проверка, что это массив и все элементы корректны
+                if (Array.isArray(parsedTasks) && parsedTasks.every((task: any) => this.isValidTask(task))){
+                    return parsedTasks; // Возвращаем корректно загруженные задачи
+                } else {
+                    console.log("Некорректные данные в localStorage. Сброс данных.");
+                    return []; // если данные повреждены
+                }
+            }
+            return []; // если данных нет
+        } catch {
+            console.log("Неудалось загрузать данные из localStorage");
+            return []; // в случае ошибки
+        }
     }
 }
